@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+{%load static%}
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Delivery Form</title>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
+	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
+	
+</head>
+<body>
+
+<img src="{% static 'css/img/Running-Wallpaper-005.jpg' %}" alt="running" id = "bg" />
+
+<div id= "title">
+<div class="nav-wrapper-new">
+<ul><li><a href="index.html" class="navcss">Home</a></li>
+  <li>
+    <a class = "navcss" onclick="void(0)">
+    Shop
+</a>
+<ul>
+  <a class="shopTitle">Football</a>
+  <li><a href="{% url 'jersey' %}">Jersey</a></li>
+    <li><a href="{% url 'shoes' %}">Shoes</a></li>
+  <li><a href="{% url 'accessories' %}">Accessories</a></li>
+   <a class="shopTitle">Running Shoes</a>
+    <li><a href="{% url 'maleRunningShoes' %}">Male</a></li>
+    <li><a href="{% url 'femaleRunningShoes' %}">Female</a></li>
+   <a class="shopTitle">Training</a>
+    <li><a href="{% url 'trainingmen' %}">Men</a></li>
+    <li><a href="{% url 'trainingwomen' %}">Women</a></li>
+    <li><a href="{% url 'trainingkids' %}">Kids</a></li>
+
+ 
+
+  </ul>
+</li>
+<li><a href="{% url 'contact' %}" class="navcss">Contact</a></li>
+<li><a href="{% url 'cart' %}" class="navcss">Cart</a></li>
+</ul>
+</div>
+
+<div class="allItems">
+<img src="{% static 'css/img/logo.jpg' %}" alt="logo" id="logo" />
+
+<div class = "whitespace">
+
+<h1 class="itemTitle">Delivery Form</h1>
+<div id="page">
+<div id="delivery-form">
+
+<form method="post" action="{% url 'deliveryForm' %}" onsubmit="alert('Congratulation! Your order is successful!')">
+  {% csrf_token %}
+  {{ form.as_p }}
+<div class="half left">
+Name: <span><img src="{% static 'css/img/user.svg' %}" alt=""></span><input type="text" name="name" id="name" placeholder="Name*" required="" oninvalid="this.setCustomValidity('Please enter your name for delivery purposes!')" oninput="setCustomValidity('')"><br><br>
+Email: <span><img src="{% static 'css/img/envelope.svg' %}" alt=""></span><input id="email" oninvalid="InvalidMsg(this);" name="email" oninput="InvalidMsg(this);" type="email" placeholder="you@example.com" required="required"><br><br>
+</div>
+<div class="half right">
+Company: <span><img src="{% static 'css/img/company.svg' %}" alt=""></span><input type="text" name="company" id="company" placeholder="Company Name"><br><br>
+Phone Number: <span><img src="{% static 'css/img/phone.svg' %}" alt=""></span><input type="text" name="phoneno" id="tel" placeholder="012-3456790" required="" oninvalid="this.setCustomValidity('Please enter your phone number!')" oninput="setCustomValidity('')"><br><br>
+</div>
+
+
+<div class="cont">
+Address: <span><img src="{% static 'css/img/address.svg' %}" alt=""></span><input type="text" name="address" id="address" placeholder="Address Line 1" required="" oninvalid="this.setCustomValidity('Please enter your address!')" oninput="setCustomValidity('')"><br><br>
+<div id="extraLine"><input type="text" name="address" class="address" placeholder="Address Line 2"><br><br>
+<input type="text" name="address" class="address" placeholder="Address Line 3"></div><br>
+</div>
+
+<div class="extra">
+<select size="1" name="state" id="state" required="" oninvalid="this.setCustomValidity('Please choose your state!')" oninput="setCustomValidity('')">
+<option value="" disabled selected hidden>State</option>
+<option>Andhra Pradesh</option>
+<option>Arunachal Pradesh</option>
+<option>Assam</option>
+<option>Bihar</option>
+<option>Chhattisgarh</option>
+<option>Goa</option>
+<option>Gujarat</option>
+<option>Haryana</option>
+<option>Himachal Pradesh</option>
+<option>Jharkhand</option>
+<option>Karnataka</option>
+<option>Kerala</option>
+<option>Madhya Pradesh</option>
+<option>Maharashtra</option>
+<option>Manipur</option>
+<option>Meghalaya</option>
+<option>Mizoram</option>
+<option>Nagaland</option>
+<option>Odisha</option>
+<option>Punjab</option>
+<option>Rajasthan</option>
+<option>Sikkim</option>
+<option>Tamil Nadu</option>
+<option>Telangana</option>
+<option>Tripura</option>
+<option>Uttar Pradesh</option>
+<option>Uttarakhand</option>
+<option>West Bengal</option>
+<option>Andaman and Nicobar Islands</option>
+<option>Chandigarh</option>
+<option>Dadra and Nagar Haveli and Daman and Diu</option>
+<option>Delhi</option>
+<option>Lakshadweep</option>
+<option>Puducherry</option>
+</select>
+ &nbsp
+ <select size="1" name="city" id="city" required="" oninvalid="this.setCustomValidity('Please choose your city!')" oninput="setCustomValidity('')">
+<option value="" disabled selected hidden>city</option>
+<option>Delhi</option>
+<option>Mumbai</option>
+<option>Bengaluru</option>
+<option>Chennai</option>
+<option>Kolkata</option>
+<option>Hyderabad</option>
+<option>Pune</option>
+<option>Ahmedabad</option>
+<option>Jaipur</option>
+<option>Surat</option>
+<option>Lucknow</option>
+<option>Kanpur</option>
+<option>Nagpur</option>
+<option>Indore</option>
+<option>Bhopal</option>
+<option>Patna</option>
+<option>Ludhiana</option>
+<option>Agra</option>
+<option>Nashik</option>
+<option>Vadodara</option>
+</select>
+&nbsp
+<input type="text" name="postalcode" id="postalcode" placeholder="Zip Code*" required="" oninvalid="this.setCustomValidity('Please enter a zip code!')" oninput="setCustomValidity('')"><br>
+</div>
+
+<div id="checkbox">
+<input type="checkbox" value="yes">Use this as billing address<br><br>
+</div>
+
+<input type="submit" value="Confirm & Submit" class="sendBtn" title="Are you sure?"> 
+</form> 
+
+	</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+function InvalidMsg(textbox) {
+    
+    if (textbox.value == '') {
+        textbox.setCustomValidity('Required email address');
+    }
+    else if(textbox.validity.typeMismatch){
+        textbox.setCustomValidity('please enter a valid email address');
+    }
+    else {
+        textbox.setCustomValidity('');
+    }
+    return true;
+}
+</script>
+
+</body>
+<html>

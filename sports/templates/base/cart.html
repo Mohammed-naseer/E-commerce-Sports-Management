@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+{%load static%}
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Shopping Cart</title>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
+	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
+	
+</head>
+<body>
+
+<img src="{% static 'css/img/bg7.jpg'%}" alt="running" id = "bg" />
+
+<div id= "title">
+<div class="nav-wrapper-new">
+<ul><li><a href="index.html" class="navcss">Home</a></li>
+  <li>
+    <a class = "navcss" onclick="void(0)">
+    Shop
+</a>
+<ul>
+    <a class="shopTitle">Football</a>
+    <li><a href="{% url 'jersey' %}">Jersey</a></li>
+      <li><a href="{% url 'shoes' %}">Shoes</a></li>
+	  <li><a href="{% url 'accessories' %}">Accessories</a></li>
+     <a class="shopTitle">Running Shoes</a>
+    	<li><a href="{% url 'maleRunningShoes' %}">Male</a></li>
+    	<li><a href="{% url 'femaleRunningShoes' %}">Female</a></li>
+     <a class="shopTitle">Training</a>
+    	<li><a href="{% url 'trainingmen' %}">Men</a></li>
+    	<li><a href="{% url 'trainingwomen' %}">Women</a></li>
+      <li><a href="{% url 'trainingkids' %}">Kids</a></li>
+
+	 
+	
+    </ul>
+  </li>
+  <li><a href="{% url 'contact' %}" class="navcss">Contact</a></li>
+  <li><a href="{% url 'cart' %}" class="navcss">Cart</a></li>
+</ul>
+</div>
+
+<div class="allItems">
+<img src="{% static 'css/img/logo.jpg'%}" alt="logo" id="logo" />
+
+<div class = "whitespace">
+
+<h1 class="itemTitle">Sample Cart Page</h1>
+<!-- Cart -->
+   <div class="shopping-cart">
+      <table id="cart">
+		<thead>
+		<tr class="head">
+			<th colspan="5"> <div class="title">Your Shopping Cart</div></th>
+		</tr>
+		</thead>
+		<tr id="row1">
+			<td class="delete"><button type="button" onclick="dltRow('row1')" title="delete">Delete</button></td>
+			<td class="product-img"><img src="{% static 'css/img/MU.jpg'%}" alt=""></td>
+			<td class="item">Manchester United Jersey<br><span class="size">M</span></td>
+			<td class="quantity">
+				<button type="button" onclick="increase_by_one('qty1')" title="plus">+</button>
+				<input type="text" min="1" id="qty1" value="1">
+				<button type="button" onclick="decrease_by_one('qty1')" title="minus">-</button>
+			</td>
+			<td class="item-price"><label>RM </label><input type="text" value="80.00" onchange="totalPrice('row1')"></td>
+		</tr>
+		<tr id="row2">
+			<td class="delete"><button type="button" onclick="dltRow('row2')" title="delete">Delete</button></td>
+			<td class="product-img"><img src="{% static 'css/img/FS5.jpg'%}" alt=""></td>
+			<td class="item">dSports King<br><span class="size">uk9</span></td>
+			<td class="quantity">
+				<button type="button" onclick="increase_by_one('qty2')" title="plus">+</button>
+				<input type="text" min="1" id="qty2" value="1" \>
+				<button type="button" onclick="decrease_by_one('qty2')" title="minus">-</button>
+			</td>
+			<td class="item-price"><label>RM </label><input type="text" value="371.76" onchange="totalPrice('row2')"></td>
+		</tr>
+		<tr id="row3">
+			<td class="delete"><button type="button" onclick="dltRow('row3')" title="delete">Delete</button></td>
+			<td class="product-img"><img src="{% static 'css/img/keepinggloves.jpg'%}" alt=""></td>
+			<td class="item">dSports Keeping Gloves<br><span class="size">OSFM</span></td>
+			<td class="quantity">
+				<button type="button" onclick="increase_by_one('qty3')" title="plus">+</button>
+				<input type="text" min="1" id="qty3" value="1" >
+				<button type="button" onclick="decrease_by_one('qty3')" title="minus">-</button>
+			</td>
+			<td class="item-price"><label>RM </label><input type="text" id="price" value="50.00"  onchange="totalPrice('row3')"></td>
+		</tr>
+		<tfoot>
+		<tr>
+			<td colspan="4" class="footer-title">Shipping Fee: <br>Subtotal: </th>
+			<td class="footer-description">FREE <br><input type="text" id="total" value="0" onchange="calculateTotal()"></td>
+		</tr>
+		</tfoot>
+	  </table>
+	  
+	  
+	  <script src="{%static 'script.js' %}">
+	  </script>
+	
+</div>
+<div class="checkout">
+	<a href="{% url 'deliveryForm' %}">
+	  <button title="Are you sure?">CHECKOUT</button>
+	</a>
+  </div>
+  
+</div>
+</div>
+</div>
+</body>
+<html>

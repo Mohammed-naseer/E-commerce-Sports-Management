@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>dSports Home</title>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/dropdown.css'%}" />
+	<link rel="shortcut icon" href="{% static 'img/favicon.ico'%}" type="image/x-icon">
+	<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+  
+</head>
+<body>
+  
+<img src="{% static 'css/img/bg1.png' %}" alt="running" id = "bg" lenght="300px" width="1000px" />
+
+<div id= "title">
+<div class="nav-wrapper-new">
+<ul><li><a href="index.html" class="navcss">Home</a></li>
+  <li>
+    <a class = "navcss" onclick="void(0)">
+    Shop
+</a>
+    <ul>
+    <a class="shopTitle">Football</a>
+    <li><a href="{% url 'jersey' %}">Jersey</a></li>
+      <li><a href="{% url 'shoes' %}">Shoes</a></li>
+	  <li><a href="{% url 'accessories' %}">Accessories</a></li>
+     <a class="shopTitle">Running Shoes</a>
+    	<li><a href="{% url 'maleRunningShoes' %}">Male</a></li>
+    	<li><a href="{% url 'femaleRunningShoes' %}">Female</a></li>
+     <a class="shopTitle">Training</a>
+    	<li><a href="{% url 'trainingmen' %}">Men</a></li>
+    	<li><a href="{% url 'trainingwomen' %}">Women</a></li>
+      <li><a href="{% url 'trainingkids' %}">Kids</a></li>
+
+	 
+	
+    </ul>
+  </li>
+  <li><a href="{% url 'contact' %}" class="navcss">Contact</a></li>
+  <li><a href="{% url 'cart' %}" class="navcss">Cart</a></li>
+</ul>
+</div>
+
+<div class="formWrapper">
+<img src="{% static 'css/img/logo.jpg'%}" alt="logo" id="logo" lenght="300px" width="300px" />
+<div class = "whitespace">
+<h1 class="itemTitle">Home</h1>
+<div class="items">
+	<div style="text-align:center"> 
+  <button onclick="playPause()">Play/Pause</button> 
+  <br><br>
+  <video id="video1" width="1000">
+    <source src="{% static '/css/img/promovideo.mp4'%}" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+</div> 
+
+<script> 
+var myVideo = document.getElementById("video1"); 
+
+function playPause() { 
+    if (myVideo.paused) 
+        myVideo.play(); 
+    else 
+        myVideo.pause(); 
+} 
+
+</script> 
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

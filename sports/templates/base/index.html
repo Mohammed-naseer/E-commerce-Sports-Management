@@ -1,77 +1,245 @@
-<!DOCTYPE html>
-{%load static%}
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>dSports Home</title>
-	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
-	<link rel="stylesheet" href="{% static 'css/dropdown.css'%}" />
-	<link rel="shortcut icon" href="{% static 'img/favicon.ico'%}" type="image/x-icon">
-	<link rel="icon" href="img/favicon.ico" type="image/x-icon">
-  
-</head>
-<body>
-  
-<img src="{% static 'css/img/bg1.png' %}" alt="running" id = "bg" lenght="300px" width="1000px" />
+{% extends 'base/base.html' %}
+{% load static %}
 
-<div id= "title">
-<div class="nav-wrapper-new">
-<ul><li><a href="index.html" class="navcss">Home</a></li>
-  <li>
-    <a class = "navcss" onclick="void(0)">
-    Shop
-</a>
-    <ul>
-    <a class="shopTitle">Football</a>
-    <li><a href="{% url 'jersey' %}">Jersey</a></li>
-      <li><a href="{% url 'shoes' %}">Shoes</a></li>
-	  <li><a href="{% url 'accessories' %}">Accessories</a></li>
-     <a class="shopTitle">Running Shoes</a>
-    	<li><a href="{% url 'maleRunningShoes' %}">Male</a></li>
-    	<li><a href="{% url 'femaleRunningShoes' %}">Female</a></li>
-     <a class="shopTitle">Training</a>
-    	<li><a href="{% url 'trainingmen' %}">Men</a></li>
-    	<li><a href="{% url 'trainingwomen' %}">Women</a></li>
-      <li><a href="{% url 'trainingkids' %}">Kids</a></li>
+{% block title %}dSports | Premium Athletic & Sports Equipment{% endblock %}
 
-	 
-	
-    </ul>
-  </li>
-  <li><a href="{% url 'contact' %}" class="navcss">Contact</a></li>
-  <li><a href="{% url 'cart' %}" class="navcss">Cart</a></li>
-</ul>
+{% block background %}
+<div class="bg-container">
+    <img src="{% static 'css/img/bg1.png' %}" alt="sports action" id="bg" />
+    <div class="bg-overlay"></div>
 </div>
+{% endblock %}
 
-<div class="formWrapper">
-<img src="{% static 'css/img/logo.jpg'%}" alt="logo" id="logo" lenght="300px" width="300px" />
-<div class = "whitespace">
-<h1 class="itemTitle">Home</h1>
-<div class="items">
-	<div style="text-align:center"> 
-  <button onclick="playPause()">Play/Pause</button> 
-  <br><br>
-  <video id="video1" width="1000">
-    <source src="{% static '/css/img/promovideo.mp4'%}" type="video/mp4">
-    Your browser does not support HTML5 video.
-  </video>
-</div> 
+{% block content %}
+<div class="home-container">
 
-<script> 
-var myVideo = document.getElementById("video1"); 
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-tag"><i class="fa-solid fa-fire"></i> Official Sports Store</span>
+            <h1 class="hero-title">Elevate Your Performance.<br>Unleash Your Potential.</h1>
+            <p class="hero-subtitle">Discover elite club football kits, high-traction boots, energy-return running shoes, and dynamic training wear designed for champions.</p>
+            <div class="hero-actions">
+                <a href="{% url 'jersey' %}" class="btn-hero-primary"><i class="fa-solid fa-shirt"></i> Shop Football Kits</a>
+                <a href="{% url 'shop' %}" class="btn-hero-secondary"><i class="fa-solid fa-compass"></i> Explore All Categories</a>
+            </div>
+        </div>
 
-function playPause() { 
-    if (myVideo.paused) 
-        myVideo.play(); 
-    else 
-        myVideo.pause(); 
-} 
+        <!-- Hero Video Card -->
+        <div class="hero-media-card">
+            <div class="video-wrapper">
+                <video id="promoVideo" loop muted playsinline poster="{% static 'css/img/logo.jpg' %}">
+                    <source src="{% static 'css/img/promovideo.mp4' %}" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+                <div class="video-overlay-controls">
+                    <button type="button" class="btn-play-pause" id="playPauseBtn" onclick="togglePromoVideo()" aria-label="Play or pause video">
+                        <i class="fa-solid fa-play" id="playIcon"></i>
+                    </button>
+                    <span class="video-tag">Watch dSports in Action</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-</script> 
+    <!-- Value Highlights Strip -->
+    <section class="value-props">
+        <div class="prop-card">
+            <div class="prop-icon"><i class="fa-solid fa-truck-fast"></i></div>
+            <div class="prop-text">
+                <h4>Free Shipping</h4>
+                <p>On orders above RM 150 across Malaysia & India</p>
+            </div>
+        </div>
+        <div class="prop-card">
+            <div class="prop-icon"><i class="fa-solid fa-certificate"></i></div>
+            <div class="prop-text">
+                <h4>100% Genuine</h4>
+                <p>Officially licensed club gear and authentic brands</p>
+            </div>
+        </div>
+        <div class="prop-card">
+            <div class="prop-icon"><i class="fa-solid fa-rotate-left"></i></div>
+            <div class="prop-text">
+                <h4>Hassle-Free Returns</h4>
+                <p>30 days return and size exchange guarantee</p>
+            </div>
+        </div>
+        <div class="prop-card">
+            <div class="prop-icon"><i class="fa-solid fa-headset"></i></div>
+            <div class="prop-text">
+                <h4>Support Helpline</h4>
+                <p>Dedicated customer service for all orders</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories Grid -->
+    <section class="section-block">
+        <div class="section-header">
+            <div>
+                <span class="section-badge">Browse Categories</span>
+                <h2 class="section-heading">Shop By Sport & Department</h2>
+            </div>
+            <a href="{% url 'shop' %}" class="view-all-link">View All Categories <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <div class="category-cards-grid">
+            <a href="{% url 'jersey' %}" class="cat-card">
+                <img src="{% static 'css/img/RM.jpg' %}" alt="Football Jerseys">
+                <div class="cat-card-overlay">
+                    <span class="cat-dept">Football</span>
+                    <h3>Official Jerseys</h3>
+                    <span class="cat-action">Shop Kits <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <a href="{% url 'shoes' %}" class="cat-card">
+                <img src="{% static 'css/img/FS1.jpg' %}" alt="Football Boots">
+                <div class="cat-card-overlay">
+                    <span class="cat-dept">Football</span>
+                    <h3>Boots & Studs</h3>
+                    <span class="cat-action">Shop Footwear <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <a href="{% url 'maleRunningShoes' %}" class="cat-card">
+                <img src="{% static 'css/img/MS1.jpg' %}" alt="Men's Running">
+                <div class="cat-card-overlay">
+                    <span class="cat-dept">Running</span>
+                    <h3>Men's Runners</h3>
+                    <span class="cat-action">Shop Men <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <a href="{% url 'femaleRunningShoes' %}" class="cat-card">
+                <img src="{% static 'css/img/FMS1.jpg' %}" alt="Women's Running">
+                <div class="cat-card-overlay">
+                    <span class="cat-dept">Running</span>
+                    <h3>Women's Runners</h3>
+                    <span class="cat-action">Shop Women <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <a href="{% url 'accessories' %}" class="cat-card">
+                <img src="{% static 'css/img/nikefootball.jpg' %}" alt="Football Accessories">
+                <div class="cat-card-overlay">
+                    <span class="cat-dept">Equipment</span>
+                    <h3>Match Balls & Gear</h3>
+                    <span class="cat-action">Shop Accessories <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <a href="{% url 'trainingmen' %}" class="cat-card">
+                <img src="{% static 'css/img/TS1.jpg' %}" alt="Training Apparel">
+                <div class="cat-card-overlay">
+                    <span class="cat-dept">Training</span>
+                    <h3>Gym & Activewear</h3>
+                    <span class="cat-action">Shop Training <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Featured Products Showcase -->
+    {% if featured_products %}
+    <section class="section-block">
+        <div class="section-header">
+            <div>
+                <span class="section-badge">Trending Gear</span>
+                <h2 class="section-heading">Featured Products of the Season</h2>
+            </div>
+            <a href="{% url 'shop' %}" class="view-all-link">Browse Full Store <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <div class="products-grid">
+            {% for product in featured_products %}
+            <div class="product-card" data-product-id="{{ product.id }}">
+                <div class="product-image-wrap">
+                    <img src="{% static 'css/img/' %}{{ product.image_name }}" alt="{{ product.name }}" class="product-thumb myImg" onclick="openModal(this.src, '{{ product.name|escapejs }} - RM {{ product.price }}')">
+                    <span class="zoom-hint" onclick="openModal('{% static 'css/img/' %}{{ product.image_name }}', '{{ product.name|escapejs }} - RM {{ product.price }}')"><i class="fa-solid fa-expand"></i></span>
+                    <span class="brand-tag">{{ product.brand }}</span>
+                    {% if product.original_price %}
+                    <span class="discount-badge">SALE</span>
+                    {% endif %}
+                </div>
+
+                <div class="product-info">
+                    <span class="product-category-name">{{ product.category.name }}</span>
+                    <h3 class="product-name">{{ product.name }}</h3>
+                    <div class="product-pricing">
+                        <span class="current-price">RM {{ product.price|floatformat:2 }}</span>
+                        {% if product.original_price %}
+                        <span class="original-price">RM {{ product.original_price|floatformat:2 }}</span>
+                        {% endif %}
+                    </div>
+
+                    <form action="{% url 'cart_add' product.id %}" method="post" class="add-to-cart-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <div class="selector-row">
+                            <div class="size-selector-wrap">
+                                <label for="size-{{ product.id }}">Size:</label>
+                                <select name="size" id="size-{{ product.id }}" class="size-dropdown">
+                                    {% for size in product.get_size_list %}
+                                    <option value="{{ size }}">{{ size }}</option>
+                                    {% empty %}
+                                    <option value="Standard">Standard</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="qty-selector-wrap">
+                                <label for="qty-{{ product.id }}">Qty:</label>
+                                <input type="number" name="quantity" id="qty-{{ product.id }}" value="1" min="1" max="10" class="qty-input">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-add-cart">
+                            <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Promo Banner Section -->
+    <section class="promo-banner-card">
+        <div class="promo-banner-content">
+            <span class="promo-pill">Limited Time Offer</span>
+            <h2>Get Game Ready with Authentic Club Kits</h2>
+            <p>From Premier League to La Liga and Serie A, gear up with official match jerseys and personalized size fits.</p>
+            <div class="promo-buttons">
+                <a href="{% url 'jersey' %}" class="btn-hero-primary">Browse All Jerseys</a>
+                <a href="{% url 'contact' %}" class="btn-hero-secondary">Inquire Team Orders</a>
+            </div>
+        </div>
+    </section>
 
 </div>
-</div>
-</div>
+{% endblock %}
 
-</body>
-</html>
+{% block extra_js %}
+<script>
+function togglePromoVideo() {
+    var vid = document.getElementById("promoVideo");
+    var icon = document.getElementById("playIcon");
+    if (!vid) return;
+
+    if (vid.paused) {
+        vid.play();
+        if (icon) {
+            icon.classList.remove("fa-play");
+            icon.classList.add("fa-pause");
+        }
+    } else {
+        vid.pause();
+        if (icon) {
+            icon.classList.remove("fa-pause");
+            icon.classList.add("fa-play");
+        }
+    }
+}
+</script>
+{% endblock %}

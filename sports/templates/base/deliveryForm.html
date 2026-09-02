@@ -1,171 +1,231 @@
-<!DOCTYPE html>
-{%load static%}
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Delivery Form</title>
-	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
-	<link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
-	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-	<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+{% extends 'base/base.html' %}
+{% load static %}
 
-	
-</head>
-<body>
+{% block title %}Checkout & Shipping Address - dSports{% endblock %}
 
-<img src="{% static 'css/img/Running-Wallpaper-005.jpg' %}" alt="running" id = "bg" />
-
-<div id= "title">
-<div class="nav-wrapper-new">
-<ul><li><a href="index.html" class="navcss">Home</a></li>
-  <li>
-    <a class = "navcss" onclick="void(0)">
-    Shop
-</a>
-<ul>
-  <a class="shopTitle">Football</a>
-  <li><a href="{% url 'jersey' %}">Jersey</a></li>
-    <li><a href="{% url 'shoes' %}">Shoes</a></li>
-  <li><a href="{% url 'accessories' %}">Accessories</a></li>
-   <a class="shopTitle">Running Shoes</a>
-    <li><a href="{% url 'maleRunningShoes' %}">Male</a></li>
-    <li><a href="{% url 'femaleRunningShoes' %}">Female</a></li>
-   <a class="shopTitle">Training</a>
-    <li><a href="{% url 'trainingmen' %}">Men</a></li>
-    <li><a href="{% url 'trainingwomen' %}">Women</a></li>
-    <li><a href="{% url 'trainingkids' %}">Kids</a></li>
-
- 
-
-  </ul>
-</li>
-<li><a href="{% url 'contact' %}" class="navcss">Contact</a></li>
-<li><a href="{% url 'cart' %}" class="navcss">Cart</a></li>
-</ul>
+{% block background %}
+<div class="bg-container">
+    <img src="{% static 'css/img/Running-Wallpaper-005.jpg' %}" alt="sports delivery" id="bg" />
+    <div class="bg-overlay"></div>
 </div>
+{% endblock %}
 
-<div class="allItems">
-<img src="{% static 'css/img/logo.jpg' %}" alt="logo" id="logo" />
+{% block content %}
+<div class="checkout-page-container">
 
-<div class = "whitespace">
+    <div class="checkout-header-title">
+        <h1><i class="fa-solid fa-truck-ramp-box"></i> Delivery & Checkout</h1>
+        <p>Please enter your delivery destination and contact details to confirm your order.</p>
+    </div>
 
-<h1 class="itemTitle">Delivery Form</h1>
-<div id="page">
-<div id="delivery-form">
+    <div class="checkout-layout">
+        <!-- Delivery Form Section -->
+        <div class="checkout-form-card">
+            <div class="card-heading">
+                <h2><i class="fa-solid fa-address-book"></i> Shipping Address</h2>
+                <span class="required-note">* Required fields</span>
+            </div>
 
-<form method="post" action="{% url 'deliveryForm' %}" onsubmit="alert('Congratulation! Your order is successful!')">
-  {% csrf_token %}
-  {{ form.as_p }}
-<div class="half left">
-Name: <span><img src="{% static 'css/img/user.svg' %}" alt=""></span><input type="text" name="name" id="name" placeholder="Name*" required="" oninvalid="this.setCustomValidity('Please enter your name for delivery purposes!')" oninput="setCustomValidity('')"><br><br>
-Email: <span><img src="{% static 'css/img/envelope.svg' %}" alt=""></span><input id="email" oninvalid="InvalidMsg(this);" name="email" oninput="InvalidMsg(this);" type="email" placeholder="you@example.com" required="required"><br><br>
+            <form method="post" action="{% url 'deliveryForm' %}" id="delivery-checkout-form" class="styled-form">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="form-errors-alert">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <strong>Please check the following fields:</strong>
+                        <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Personal Info Section -->
+                <div class="form-section-title">Recipient Information</div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="name">Full Name <span class="req">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" name="name" id="name" placeholder="John Doe" value="{{ form.name.value|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="req">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" name="email" id="email" placeholder="john@example.com" value="{{ form.email.value|default:'' }}" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="phoneno">Phone Number <span class="req">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" name="phoneno" id="phoneno" placeholder="+91 9876543210" value="{{ form.phoneno.value|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company / Organization (Optional)</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-building"></i>
+                            <input type="text" name="company" id="company" placeholder="Company Name" value="{{ form.company.value|default:'' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address Section -->
+                <div class="form-section-title">Delivery Destination</div>
+                <div class="form-group">
+                    <label for="address">Street Address (Line 1) <span class="req">*</span></label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" name="address" id="address" placeholder="House / Flat No., Street, Landmark" value="{{ form.address.value|default:'' }}" required>
+                    </div>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="address2">Address Line 2 (Optional)</label>
+                        <input type="text" name="address2" id="address2" placeholder="Apartment, suite, unit" value="{{ form.address2.value|default:'' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address3">Address Line 3 / Landmark (Optional)</label>
+                        <input type="text" name="address3" id="address3" placeholder="Near Stadium, Metro, etc." value="{{ form.address3.value|default:'' }}">
+                    </div>
+                </div>
+
+                <div class="form-grid-3">
+                    <div class="form-group">
+                        <label for="state">State <span class="req">*</span></label>
+                        <select name="state" id="state" required class="styled-select">
+                            {% for val, label in form.fields.state.choices %}
+                            <option value="{{ val }}" {% if form.state.value == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City <span class="req">*</span></label>
+                        <select name="city" id="city" required class="styled-select">
+                            {% for val, label in form.fields.city.choices %}
+                            <option value="{{ val }}" {% if form.city.value == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postalcode">Postal / Zip Code <span class="req">*</span></label>
+                        <input type="text" name="postalcode" id="postalcode" placeholder="500011" value="{{ form.postalcode.value|default:'' }}" required>
+                    </div>
+                </div>
+
+                <!-- Options & Preferences -->
+                <div class="form-checkbox-wrap">
+                    <label class="custom-checkbox-label">
+                        <input type="checkbox" name="billing_same" value="True" checked>
+                        <span>Use this shipping address as the billing address</span>
+                    </label>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="form-section-title">Payment Method</div>
+                <div class="payment-method-selector">
+                    <label class="payment-option selected">
+                        <input type="radio" name="payment_method" value="cod" checked>
+                        <div class="option-content">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                            <div>
+                                <strong>Cash / UPI on Delivery</strong>
+                                <p>Pay conveniently when your order arrives at your door.</p>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="card">
+                        <div class="option-content">
+                            <i class="fa-solid fa-credit-card"></i>
+                            <div>
+                                <strong>Credit / Debit Card (Online)</strong>
+                                <p>Instant secure payment via Visa, Mastercard, or RuPay.</p>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="form-submit-row">
+                    <a href="{% url 'cart' %}" class="btn-back-to-cart"><i class="fa-solid fa-chevron-left"></i> Return to Cart</a>
+                    <button type="submit" class="btn-confirm-order" id="submitOrderBtn">
+                        <i class="fa-solid fa-circle-check"></i> Place & Confirm Order
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Order Summary & Items Card -->
+        <div class="checkout-summary-card">
+            <div class="card-heading">
+                <h2><i class="fa-solid fa-receipt"></i> Items in Order ({{ cart|length }})</h2>
+                <a href="{% url 'cart' %}" class="edit-cart-link">Edit Cart</a>
+            </div>
+
+            <div class="checkout-items-list">
+                {% for item in cart %}
+                <div class="checkout-item-row">
+                    <img src="{% static 'css/img/' %}{{ item.image_name }}" alt="{{ item.name }}" class="checkout-item-img">
+                    <div class="checkout-item-details">
+                        <span class="item-name">{{ item.name }}</span>
+                        <div class="item-meta">
+                            <span class="item-size">Size: {{ item.size }}</span>
+                            <span class="item-qty">Qty: {{ item.quantity }}</span>
+                        </div>
+                    </div>
+                    <div class="checkout-item-price">
+                        RM {{ item.total_price|floatformat:2 }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="checkout-pricing-breakdown">
+                <div class="price-row">
+                    <span>Subtotal</span>
+                    <span>RM {{ cart_total|floatformat:2 }}</span>
+                </div>
+                <div class="price-row">
+                    <span>Shipping</span>
+                    <span class="free-shipping-text">FREE</span>
+                </div>
+                <div class="price-row">
+                    <span>Estimated Tax</span>
+                    <span>RM 0.00</span>
+                </div>
+                <div class="pricing-divider"></div>
+                <div class="price-row final-total-row">
+                    <span>Total Payable</span>
+                    <span class="total-highlight">RM {{ cart_total|floatformat:2 }}</span>
+                </div>
+            </div>
+
+            <div class="checkout-guarantee-box">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div>
+                    <strong>Buyer Protection Guarantee</strong>
+                    <p>All items undergo rigorous quality checks prior to dispatch.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
-<div class="half right">
-Company: <span><img src="{% static 'css/img/company.svg' %}" alt=""></span><input type="text" name="company" id="company" placeholder="Company Name"><br><br>
-Phone Number: <span><img src="{% static 'css/img/phone.svg' %}" alt=""></span><input type="text" name="phoneno" id="tel" placeholder="012-3456790" required="" oninvalid="this.setCustomValidity('Please enter your phone number!')" oninput="setCustomValidity('')"><br><br>
-</div>
-
-
-<div class="cont">
-Address: <span><img src="{% static 'css/img/address.svg' %}" alt=""></span><input type="text" name="address" id="address" placeholder="Address Line 1" required="" oninvalid="this.setCustomValidity('Please enter your address!')" oninput="setCustomValidity('')"><br><br>
-<div id="extraLine"><input type="text" name="address" class="address" placeholder="Address Line 2"><br><br>
-<input type="text" name="address" class="address" placeholder="Address Line 3"></div><br>
-</div>
-
-<div class="extra">
-<select size="1" name="state" id="state" required="" oninvalid="this.setCustomValidity('Please choose your state!')" oninput="setCustomValidity('')">
-<option value="" disabled selected hidden>State</option>
-<option>Andhra Pradesh</option>
-<option>Arunachal Pradesh</option>
-<option>Assam</option>
-<option>Bihar</option>
-<option>Chhattisgarh</option>
-<option>Goa</option>
-<option>Gujarat</option>
-<option>Haryana</option>
-<option>Himachal Pradesh</option>
-<option>Jharkhand</option>
-<option>Karnataka</option>
-<option>Kerala</option>
-<option>Madhya Pradesh</option>
-<option>Maharashtra</option>
-<option>Manipur</option>
-<option>Meghalaya</option>
-<option>Mizoram</option>
-<option>Nagaland</option>
-<option>Odisha</option>
-<option>Punjab</option>
-<option>Rajasthan</option>
-<option>Sikkim</option>
-<option>Tamil Nadu</option>
-<option>Telangana</option>
-<option>Tripura</option>
-<option>Uttar Pradesh</option>
-<option>Uttarakhand</option>
-<option>West Bengal</option>
-<option>Andaman and Nicobar Islands</option>
-<option>Chandigarh</option>
-<option>Dadra and Nagar Haveli and Daman and Diu</option>
-<option>Delhi</option>
-<option>Lakshadweep</option>
-<option>Puducherry</option>
-</select>
- &nbsp
- <select size="1" name="city" id="city" required="" oninvalid="this.setCustomValidity('Please choose your city!')" oninput="setCustomValidity('')">
-<option value="" disabled selected hidden>city</option>
-<option>Delhi</option>
-<option>Mumbai</option>
-<option>Bengaluru</option>
-<option>Chennai</option>
-<option>Kolkata</option>
-<option>Hyderabad</option>
-<option>Pune</option>
-<option>Ahmedabad</option>
-<option>Jaipur</option>
-<option>Surat</option>
-<option>Lucknow</option>
-<option>Kanpur</option>
-<option>Nagpur</option>
-<option>Indore</option>
-<option>Bhopal</option>
-<option>Patna</option>
-<option>Ludhiana</option>
-<option>Agra</option>
-<option>Nashik</option>
-<option>Vadodara</option>
-</select>
-&nbsp
-<input type="text" name="postalcode" id="postalcode" placeholder="Zip Code*" required="" oninvalid="this.setCustomValidity('Please enter a zip code!')" oninput="setCustomValidity('')"><br>
-</div>
-
-<div id="checkbox">
-<input type="checkbox" value="yes">Use this as billing address<br><br>
-</div>
-
-<input type="submit" value="Confirm & Submit" class="sendBtn" title="Are you sure?"> 
-</form> 
-
-	</div>
-</div>
-</div>
-</div>
-</div>
-
-<script>
-function InvalidMsg(textbox) {
-    
-    if (textbox.value == '') {
-        textbox.setCustomValidity('Required email address');
-    }
-    else if(textbox.validity.typeMismatch){
-        textbox.setCustomValidity('please enter a valid email address');
-    }
-    else {
-        textbox.setCustomValidity('');
-    }
-    return true;
-}
-</script>
-
-</body>
-<html>
+{% endblock %}

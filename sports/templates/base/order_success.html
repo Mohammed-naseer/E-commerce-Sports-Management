@@ -1,0 +1,122 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmed #{{ order.order_number }} - dSports{% endblock %}
+
+{% block background %}
+<div class="bg-container">
+    <img src="{% static 'css/img/bg1.png' %}" alt="order success" id="bg" />
+    <div class="bg-overlay"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="success-page-container">
+
+    <!-- Success Header Card -->
+    <div class="success-banner-card">
+        <div class="success-icon-wrap">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <span class="success-subtitle">Payment & Order Verified</span>
+        <h1 class="success-title">Thank You For Your Order!</h1>
+        <p class="success-message">We have received your order and are currently preparing your sports gear for dispatch.</p>
+        
+        <div class="order-ref-badge">
+            <span>Order Number:</span>
+            <strong>#{{ order.order_number }}</strong>
+        </div>
+    </div>
+
+    <!-- Order Receipt Layout -->
+    <div class="receipt-layout">
+        <!-- Main Order Details Card -->
+        <div class="receipt-card">
+            <div class="receipt-header">
+                <h2><i class="fa-solid fa-receipt"></i> Order Summary & Items</h2>
+                <span class="order-status-pill status-{{ order.status|lower }}">{{ order.status }}</span>
+            </div>
+
+            <div class="receipt-items-table">
+                {% for item in order.items.all %}
+                <div class="receipt-item-row">
+                    <img src="{% static 'css/img/' %}{{ item.image_name }}" alt="{{ item.product_name }}" class="receipt-item-thumb" onerror="this.src='{% static 'css/img/logo.jpg' %}'">
+                    <div class="receipt-item-meta">
+                        <h4>{{ item.product_name }}</h4>
+                        <p>Size: <span class="receipt-size-tag">{{ item.size }}</span> &bull; Qty: {{ item.quantity }} &bull; Unit: RM {{ item.price|floatformat:2 }}</p>
+                    </div>
+                    <div class="receipt-item-subtotal">
+                        RM {{ item.total_price|floatformat:2 }}
+                    </div>
+                </div>
+                {% empty %}
+                <p>No item details available.</p>
+                {% endfor %}
+            </div>
+
+            <div class="receipt-totals-section">
+                <div class="receipt-total-row">
+                    <span>Items Subtotal:</span>
+                    <span>RM {{ order.total_amount|floatformat:2 }}</span>
+                </div>
+                <div class="receipt-total-row">
+                    <span>Shipping (Express):</span>
+                    <span class="free-badge">FREE</span>
+                </div>
+                <div class="receipt-total-divider"></div>
+                <div class="receipt-total-row grand-total">
+                    <span>Total Amount:</span>
+                    <span class="grand-price">RM {{ order.total_amount|floatformat:2 }}</span>
+                </div>
+            </div>
+
+            <div class="receipt-actions">
+                <button type="button" class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Invoice</button>
+                <a href="{% url 'home' %}" class="btn-home"><i class="fa-solid fa-house"></i> Return to Homepage</a>
+                <a href="{% url 'shop' %}" class="btn-shop-more"><i class="fa-solid fa-bag-shopping"></i> Continue Shopping</a>
+            </div>
+        </div>
+
+        <!-- Shipping & Customer Details Card -->
+        <div class="customer-info-card">
+            <div class="info-card-header">
+                <h3><i class="fa-solid fa-truck-fast"></i> Shipping Details</h3>
+            </div>
+            <div class="info-card-body">
+                <div class="info-group">
+                    <span class="info-label">Recipient Name</span>
+                    <span class="info-value">{{ order.name }}</span>
+                </div>
+                {% if order.company %}
+                <div class="info-group">
+                    <span class="info-label">Company</span>
+                    <span class="info-value">{{ order.company }}</span>
+                </div>
+                {% endif %}
+                <div class="info-group">
+                    <span class="info-label">Email Address</span>
+                    <span class="info-value">{{ order.email }}</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Phone Number</span>
+                    <span class="info-value">{{ order.phone }}</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Shipping Destination</span>
+                    <span class="info-value">
+                        {{ order.address1 }}<br>
+                        {% if order.address2 %}{{ order.address2 }}<br>{% endif %}
+                        {% if order.address3 %}{{ order.address3 }}<br>{% endif %}
+                        {{ order.city }}, {{ order.state }} - {{ order.postalcode }}
+                    </span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Estimated Delivery</span>
+                    <span class="info-value est-delivery"><i class="fa-regular fa-calendar-check"></i> 3 - 5 Business Days</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

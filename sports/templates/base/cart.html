@@ -1,117 +1,183 @@
-<!DOCTYPE html>
-{%load static%}
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Shopping Cart</title>
-	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
-	<link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
-	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-	<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+{% extends 'base/base.html' %}
+{% load static %}
 
-	
-</head>
-<body>
+{% block title %}Shopping Cart - dSports{% endblock %}
 
-<img src="{% static 'css/img/bg7.jpg'%}" alt="running" id = "bg" />
-
-<div id= "title">
-<div class="nav-wrapper-new">
-<ul><li><a href="index.html" class="navcss">Home</a></li>
-  <li>
-    <a class = "navcss" onclick="void(0)">
-    Shop
-</a>
-<ul>
-    <a class="shopTitle">Football</a>
-    <li><a href="{% url 'jersey' %}">Jersey</a></li>
-      <li><a href="{% url 'shoes' %}">Shoes</a></li>
-	  <li><a href="{% url 'accessories' %}">Accessories</a></li>
-     <a class="shopTitle">Running Shoes</a>
-    	<li><a href="{% url 'maleRunningShoes' %}">Male</a></li>
-    	<li><a href="{% url 'femaleRunningShoes' %}">Female</a></li>
-     <a class="shopTitle">Training</a>
-    	<li><a href="{% url 'trainingmen' %}">Men</a></li>
-    	<li><a href="{% url 'trainingwomen' %}">Women</a></li>
-      <li><a href="{% url 'trainingkids' %}">Kids</a></li>
-
-	 
-	
-    </ul>
-  </li>
-  <li><a href="{% url 'contact' %}" class="navcss">Contact</a></li>
-  <li><a href="{% url 'cart' %}" class="navcss">Cart</a></li>
-</ul>
+{% block background %}
+<div class="bg-container">
+    <img src="{% static 'css/img/bg7.jpg' %}" alt="sports background" id="bg" />
+    <div class="bg-overlay"></div>
 </div>
+{% endblock %}
 
-<div class="allItems">
-<img src="{% static 'css/img/logo.jpg'%}" alt="logo" id="logo" />
+{% block content %}
+<div class="cart-page-container">
 
-<div class = "whitespace">
+    <div class="cart-header-title">
+        <h1><i class="fa-solid fa-cart-shopping"></i> Your Shopping Cart</h1>
+        <p>Review your selected sports gear, adjust quantities, and proceed to checkout.</p>
+    </div>
 
-<h1 class="itemTitle">Sample Cart Page</h1>
-<!-- Cart -->
-   <div class="shopping-cart">
-      <table id="cart">
-		<thead>
-		<tr class="head">
-			<th colspan="5"> <div class="title">Your Shopping Cart</div></th>
-		</tr>
-		</thead>
-		<tr id="row1">
-			<td class="delete"><button type="button" onclick="dltRow('row1')" title="delete">Delete</button></td>
-			<td class="product-img"><img src="{% static 'css/img/MU.jpg'%}" alt=""></td>
-			<td class="item">Manchester United Jersey<br><span class="size">M</span></td>
-			<td class="quantity">
-				<button type="button" onclick="increase_by_one('qty1')" title="plus">+</button>
-				<input type="text" min="1" id="qty1" value="1">
-				<button type="button" onclick="decrease_by_one('qty1')" title="minus">-</button>
-			</td>
-			<td class="item-price"><label>RM </label><input type="text" value="80.00" onchange="totalPrice('row1')"></td>
-		</tr>
-		<tr id="row2">
-			<td class="delete"><button type="button" onclick="dltRow('row2')" title="delete">Delete</button></td>
-			<td class="product-img"><img src="{% static 'css/img/FS5.jpg'%}" alt=""></td>
-			<td class="item">dSports King<br><span class="size">uk9</span></td>
-			<td class="quantity">
-				<button type="button" onclick="increase_by_one('qty2')" title="plus">+</button>
-				<input type="text" min="1" id="qty2" value="1" \>
-				<button type="button" onclick="decrease_by_one('qty2')" title="minus">-</button>
-			</td>
-			<td class="item-price"><label>RM </label><input type="text" value="371.76" onchange="totalPrice('row2')"></td>
-		</tr>
-		<tr id="row3">
-			<td class="delete"><button type="button" onclick="dltRow('row3')" title="delete">Delete</button></td>
-			<td class="product-img"><img src="{% static 'css/img/keepinggloves.jpg'%}" alt=""></td>
-			<td class="item">dSports Keeping Gloves<br><span class="size">OSFM</span></td>
-			<td class="quantity">
-				<button type="button" onclick="increase_by_one('qty3')" title="plus">+</button>
-				<input type="text" min="1" id="qty3" value="1" >
-				<button type="button" onclick="decrease_by_one('qty3')" title="minus">-</button>
-			</td>
-			<td class="item-price"><label>RM </label><input type="text" id="price" value="50.00"  onchange="totalPrice('row3')"></td>
-		</tr>
-		<tfoot>
-		<tr>
-			<td colspan="4" class="footer-title">Shipping Fee: <br>Subtotal: </th>
-			<td class="footer-description">FREE <br><input type="text" id="total" value="0" onchange="calculateTotal()"></td>
-		</tr>
-		</tfoot>
-	  </table>
-	  
-	  
-	  <script src="{%static 'script.js' %}">
-	  </script>
-	
+    {% if cart|length > 0 %}
+    <div class="cart-layout">
+        <!-- Cart Items Table Card -->
+        <div class="cart-items-card">
+            <div class="table-responsive">
+                <table class="cart-table" id="cart-items-table">
+                    <thead>
+                        <tr>
+                            <th class="col-item" colspan="2">Product</th>
+                            <th class="col-size">Size</th>
+                            <th class="col-price">Unit Price</th>
+                            <th class="col-qty">Quantity</th>
+                            <th class="col-total">Subtotal</th>
+                            <th class="col-action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart %}
+                        <tr class="cart-row" id="cart-row-{{ item.product_id }}-{{ item.size }}" data-product-id="{{ item.product_id }}" data-size="{{ item.size }}">
+                            <td class="product-thumb-cell">
+                                <img src="{% static 'css/img/' %}{{ item.image_name }}" alt="{{ item.name }}" class="cart-item-img" onclick="openModal(this.src, '{{ item.name|escapejs }}')">
+                            </td>
+                            <td class="product-meta-cell">
+                                <span class="cart-product-title">{{ item.name }}</span>
+                                <span class="cart-product-id">SKU: DSP-{{ item.product_id }}</span>
+                            </td>
+                            <td class="size-cell">
+                                <span class="size-badge">{{ item.size }}</span>
+                            </td>
+                            <td class="price-cell">
+                                RM {{ item.price|floatformat:2 }}
+                            </td>
+                            <td class="qty-cell">
+                                <div class="cart-qty-control">
+                                    <button type="button" class="btn-qty-decrease" onclick="changeCartQty('{{ item.product_id }}', '{{ item.size }}', -1)" title="Decrease Quantity"><i class="fa-solid fa-minus"></i></button>
+                                    <input type="number" id="qty-input-{{ item.product_id }}-{{ item.size }}" class="cart-qty-input" value="{{ item.quantity }}" min="1" max="20" onchange="updateCartItem('{{ item.product_id }}', '{{ item.size }}', this.value)">
+                                    <button type="button" class="btn-qty-increase" onclick="changeCartQty('{{ item.product_id }}', '{{ item.size }}', 1)" title="Increase Quantity"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+                            </td>
+                            <td class="subtotal-cell">
+                                <strong id="item-total-{{ item.product_id }}-{{ item.size }}" class="item-subtotal">RM {{ item.total_price|floatformat:2 }}</strong>
+                            </td>
+                            <td class="action-cell">
+                                <a href="{% url 'cart_remove' item.product_id %}?size={{ item.size }}" class="btn-remove-item" onclick="return confirm('Remove {{ item.name }} from your cart?');" title="Remove Item">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cart-card-footer">
+                <a href="{% url 'shop' %}" class="btn-continue-shopping"><i class="fa-solid fa-arrow-left"></i> Continue Shopping</a>
+                <a href="{% url 'cart_clear' %}" class="btn-clear-cart" onclick="return confirm('Are you sure you want to clear your entire cart?');"><i class="fa-solid fa-trash"></i> Clear Cart</a>
+            </div>
+        </div>
+
+        <!-- Order Summary Card -->
+        <div class="cart-summary-card">
+            <div class="summary-header">
+                <h3>Order Summary</h3>
+            </div>
+            
+            <div class="summary-rows">
+                <div class="summary-row">
+                    <span>Items Subtotal</span>
+                    <span id="summary-subtotal" class="amount">RM {{ cart_total|floatformat:2 }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Estimated Shipping</span>
+                    <span class="free-shipping-badge">FREE</span>
+                </div>
+                <div class="summary-row">
+                    <span>Sales Tax (0%)</span>
+                    <span>RM 0.00</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-row total-row">
+                    <span>Total Amount</span>
+                    <span id="summary-total" class="total-amount">RM {{ cart_total|floatformat:2 }}</span>
+                </div>
+            </div>
+
+            <div class="summary-actions">
+                <a href="{% url 'deliveryForm' %}" class="btn-checkout">
+                    Proceed to Delivery & Checkout <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="summary-perks">
+                <div class="perk-item"><i class="fa-solid fa-shield-halved"></i> Secure SSL 256-Bit Encrypted Checkout</div>
+                <div class="perk-item"><i class="fa-solid fa-truck-fast"></i> Dispatched within 24 Hours</div>
+                <div class="perk-item"><i class="fa-solid fa-arrow-rotate-left"></i> 30-Day Easy Exchange Policy</div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Empty Cart Card -->
+    <div class="empty-cart-card">
+        <div class="empty-cart-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+        <h2>Your Shopping Cart is Empty</h2>
+        <p>Looks like you haven't added any sports jerseys, shoes, or gear to your cart yet.</p>
+        <div class="empty-actions">
+            <a href="{% url 'jersey' %}" class="btn-primary"><i class="fa-solid fa-shirt"></i> Shop Jerseys</a>
+            <a href="{% url 'shoes' %}" class="btn-secondary"><i class="fa-solid fa-shoe-prints"></i> Shop Football Shoes</a>
+            <a href="{% url 'shop' %}" class="btn-secondary"><i class="fa-solid fa-compass"></i> Explore All Gear</a>
+        </div>
+    </div>
+    {% endif %}
+
 </div>
-<div class="checkout">
-	<a href="{% url 'deliveryForm' %}">
-	  <button title="Are you sure?">CHECKOUT</button>
-	</a>
-  </div>
-  
-</div>
-</div>
-</div>
-</body>
-<html>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function changeCartQty(productId, size, delta) {
+    var inputId = "qty-input-" + productId + "-" + size;
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    var currentVal = parseInt(input.value) || 1;
+    var newVal = Math.max(1, currentVal + delta);
+    input.value = newVal;
+    updateCartItem(productId, size, newVal);
+}
+
+function updateCartItem(productId, size, quantity) {
+    var qty = parseInt(quantity) || 1;
+    if (qty < 1) qty = 1;
+
+    $.ajax({
+        url: "{% url 'cart_update' %}",
+        type: "POST",
+        data: {
+            'product_id': productId,
+            'size': size,
+            'quantity': qty,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            if (response.status === 'success') {
+                var itemTotalElem = document.getElementById("item-total-" + productId + "-" + size);
+                if (itemTotalElem) {
+                    itemTotalElem.innerText = "RM " + response.item_total;
+                }
+                var subtotalElem = document.getElementById("summary-subtotal");
+                var totalElem = document.getElementById("summary-total");
+                if (subtotalElem) subtotalElem.innerText = "RM " + response.cart_total;
+                if (totalElem) totalElem.innerText = "RM " + response.cart_total;
+
+                var badge = document.getElementById("cart-badge-count");
+                if (badge) badge.innerText = response.cart_count;
+            }
+        },
+        error: function(xhr) {
+            console.error("Failed to update cart", xhr);
+        }
+    });
+}
+</script>
+{% endblock %}

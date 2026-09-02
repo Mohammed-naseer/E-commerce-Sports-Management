@@ -1,7 +1,9 @@
 from django import forms
+from .models import Delivery, ContactSubmission, Order
 
 STATE_CHOICES = [
-   ('Andhra Pradesh', 'Andhra Pradesh'),
+    ('', '-- Select State --'),
+    ('Andhra Pradesh', 'Andhra Pradesh'),
     ('Arunachal Pradesh', 'Arunachal Pradesh'),
     ('Assam', 'Assam'),
     ('Bihar', 'Bihar'),
@@ -35,8 +37,10 @@ STATE_CHOICES = [
     ('Delhi', 'Delhi'),
     ('Lakshadweep', 'Lakshadweep'),
     ('Puducherry', 'Puducherry'),
-    ]
+]
+
 CITY_CHOICES = [
+    ('', '-- Select City --'),
     ('Ahmedabad', 'Ahmedabad'),
     ('Bangalore', 'Bangalore'),
     ('Bhopal', 'Bhopal'),
@@ -79,17 +83,20 @@ CITY_CHOICES = [
     ('Visakhapatnam', 'Visakhapatnam'),
 ]
 
-
-
-class DeliveryForm (forms.Form):
-    name = forms.CharField(max_length=100, required=True, label='Name')
-    email = forms.EmailField(required=True, label='Email')
-    company = forms.CharField(max_length=100, required=False, label='Company')
-    phoneno = forms.CharField(max_length=15, required=True, label='Phone Number')
-    address_line1 = forms.CharField(max_length=255, required=True, label='Address Line 1')
-    address_line2 = forms.CharField(max_length=255, required=False, label='Address Line 2')
-    address_line3 = forms.CharField(max_length=255, required=False, label='Address Line 3')
+class DeliveryForm(forms.Form):
+    name = forms.CharField(max_length=100, required=True)
+    email = forms.EmailField(required=True)
+    company = forms.CharField(max_length=100, required=False)
+    phoneno = forms.CharField(max_length=20, required=True)
+    address = forms.CharField(max_length=255, required=True)
+    address2 = forms.CharField(max_length=255, required=False)
+    address3 = forms.CharField(max_length=255, required=False)
     state = forms.ChoiceField(choices=STATE_CHOICES, required=True)
     city = forms.ChoiceField(choices=CITY_CHOICES, required=True)
-    postalcode = forms.CharField(max_length=10, required=True, label='Zip Code')
-    billing_same = forms.BooleanField(required=False, label="Use as billing address")
+    postalcode = forms.CharField(max_length=15, required=True)
+    billing_same = forms.BooleanField(required=False)
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactSubmission
+        fields = ['first_name', 'last_name', 'email', 'phone', 'preference', 'query_type', 'message']

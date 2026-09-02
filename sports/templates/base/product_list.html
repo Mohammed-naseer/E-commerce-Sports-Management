@@ -1,0 +1,129 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if category %}{{ category.name }} - dSports{% elif query %}Search: {{ query }} - dSports{% else %}All Products - dSports{% endif %}
+{% endblock %}
+
+{% block background %}
+<div class="bg-container">
+    {% if category and category.banner_image %}
+    <img src="{% static 'css/img/' %}{{ category.banner_image }}" alt="{{ category.name }}" id="bg" />
+    {% else %}
+    <img src="{% static 'css/img/bg6.jpg' %}" alt="sports background" id="bg" />
+    {% endif %}
+    <div class="bg-overlay"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="catalog-page-container">
+
+    <!-- Category Header Banner -->
+    <div class="catalog-header-card">
+        <div class="catalog-header-content">
+            {% if category %}
+                <span class="category-badge">{{ category.department }}</span>
+                <h1 class="catalog-title">{{ category.name }}</h1>
+                {% if category.description %}
+                    <p class="catalog-description">{{ category.description }}</p>
+                {% endif %}
+            {% elif query %}
+                <span class="category-badge">Search Results</span>
+                <h1 class="catalog-title">Results for "{{ query }}"</h1>
+                <p class="catalog-description">Found {{ products|length }} item{{ products|length|pluralize }} matching your search.</p>
+            {% else %}
+                <span class="category-badge">Full Catalog</span>
+                <h1 class="catalog-title">All Sports Equipment & Apparel</h1>
+                <p class="catalog-description">Explore our complete collection of football kits, professional running footwear, and athletic gear.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Catalog Control Bar (Filters & Sorting) -->
+    <div class="catalog-controls">
+        <div class="results-count">
+            Showing <strong>{{ products|length }}</strong> product{{ products|length|pluralize }}
+        </div>
+
+        <form method="get" class="sort-form" id="sort-form">
+            {% if query %}<input type="hidden" name="q" value="{{ query }}">{% endif %}
+            <label for="sort-select"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By:</label>
+            <select name="sort" id="sort-select" onchange="document.getElementById('sort-form').submit();">
+                <option value="" {% if not sort %}selected{% endif %}>Featured / Newest</option>
+                <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                <option value="name" {% if sort == 'name' %}selected{% endif %}>Product Name (A-Z)</option>
+            </select>
+        </form>
+    </div>
+
+    <!-- Products Grid -->
+    {% if products %}
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card" data-product-id="{{ product.id }}">
+            <div class="product-image-wrap">
+                <img src="{% static 'css/img/' %}{{ product.image_name }}" alt="{{ product.name }}" class="product-thumb myImg" onclick="openModal(this.src, '{{ product.name|escapejs }} - RM {{ product.price }}')">
+                <span class="zoom-hint" onclick="openModal('{% static 'css/img/' %}{{ product.image_name }}', '{{ product.name|escapejs }} - RM {{ product.price }}')" title="Click to zoom"><i class="fa-solid fa-expand"></i></span>
+                {% if product.original_price %}
+                <span class="discount-badge">SAVE RM {{ product.original_price|floatformat:2 }}</span>
+                {% endif %}
+                <span class="brand-tag">{{ product.brand }}</span>
+            </div>
+
+            <div class="product-info">
+                <h3 class="product-name">{{ product.name }}</h3>
+                <div class="product-pricing">
+                    <span class="current-price">RM {{ product.price|floatformat:2 }}</span>
+                    {% if product.original_price %}
+                    <span class="original-price">RM {{ product.original_price|floatformat:2 }}</span>
+                    {% endif %}
+                </div>
+                
+                {% if product.description %}
+                <p class="product-short-desc">{{ product.description|truncatewords:12 }}</p>
+                {% endif %}
+
+                <!-- Add to Cart Form -->
+                <form action="{% url 'cart_add' product.id %}" method="post" class="add-to-cart-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    
+                    <div class="selector-row">
+                        <div class="size-selector-wrap">
+                            <label for="size-{{ product.id }}">Size:</label>
+                            <select name="size" id="size-{{ product.id }}" class="size-dropdown" required>
+                                {% for size in product.get_size_list %}
+                                <option value="{{ size }}">{{ size }}</option>
+                                {% empty %}
+                                <option value="Standard">Standard</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="qty-selector-wrap">
+                            <label for="qty-{{ product.id }}">Qty:</label>
+                            <input type="number" name="quantity" id="qty-{{ product.id }}" value="1" min="1" max="10" class="qty-input">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-add-cart">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state-card">
+        <div class="empty-icon"><i class="fa-solid fa-box-open"></i></div>
+        <h2>No Products Found</h2>
+        <p>We couldn't find any products matching your criteria. Try browsing our other departments or clear filters.</p>
+        <a href="{% url 'shop' %}" class="btn-primary"><i class="fa-solid fa-bag-shopping"></i> View All Products</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

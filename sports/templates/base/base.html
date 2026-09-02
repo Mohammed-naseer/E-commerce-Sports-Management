@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}dSports | Premium Athletic & Sports Equipment{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}" />
+    <link rel="shortcut icon" href="{% static 'css/img/favicon.ico' %}" type="image/x-icon">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+    <!-- Background Image / Overlay -->
+    {% block background %}
+    <div class="bg-container">
+        <img src="{% static 'css/img/bg1.png' %}" alt="sports background" id="bg" />
+        <div class="bg-overlay"></div>
+    </div>
+    {% endblock %}
+
+    <!-- Top Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-content">
+            <span><i class="fa-solid fa-truck-fast"></i> FREE Express Delivery On Orders Over RM 150</span>
+            <span><i class="fa-solid fa-medal"></i> 100% Authentic Official Sports Gear</span>
+            <span><i class="fa-solid fa-headset"></i> Customer Support: 7013722022</span>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="{% url 'home' %}" class="brand-logo">
+                <img src="{% static 'css/img/barlogo.png' %}" alt="dSports" class="logo-img" onerror="this.src='{% static 'css/img/logo.jpg' %}'">
+                <span class="logo-text">d<span>SPORTS</span></span>
+            </a>
+
+            <!-- Search Form -->
+            <form action="{% url 'shop' %}" method="get" class="header-search">
+                <input type="text" name="q" placeholder="Search jerseys, running shoes, gear..." value="{{ query|default:'' }}" required>
+                <button type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+
+            <!-- Navigation Links -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="{% url 'home' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">Home</a></li>
+                    
+                    <li class="nav-dropdown-item">
+                        <a href="{% url 'shop' %}" class="nav-link {% if '/shop/' in request.path or '/jersey/' in request.path or '/shoes/' in request.path or '/accessories/' in request.path or '/maleRunningShoes/' in request.path or '/femaleRunningShoes/' in request.path or '/training' in request.path %}active{% endif %}">
+                            Shop <i class="fa-solid fa-chevron-down nav-arrow"></i>
+                        </a>
+                        <div class="mega-dropdown">
+                            <div class="dropdown-column">
+                                <div class="dept-title"><i class="fa-regular fa-futbol"></i> Football</div>
+                                <a href="{% url 'jersey' %}" class="dept-link">Jerseys (Kits)</a>
+                                <a href="{% url 'shoes' %}" class="dept-link">Boots & Cleats</a>
+                                <a href="{% url 'accessories' %}" class="dept-link">Accessories & Balls</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <div class="dept-title"><i class="fa-solid fa-person-running"></i> Running Shoes</div>
+                                <a href="{% url 'maleRunningShoes' %}" class="dept-link">Men's Running</a>
+                                <a href="{% url 'femaleRunningShoes' %}" class="dept-link">Women's Running</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <div class="dept-title"><i class="fa-solid fa-dumbbell"></i> Training</div>
+                                <a href="{% url 'trainingmen' %}" class="dept-link">Men's Training</a>
+                                <a href="{% url 'trainingwomen' %}" class="dept-link">Women's Training</a>
+                                <a href="{% url 'trainingkids' %}" class="dept-link">Kids' Athletic</a>
+                            </div>
+                            <div class="dropdown-column banner-col">
+                                <div class="dropdown-promo">
+                                    <h4>New Season 2024/25</h4>
+                                    <p>Official Football Kits Available Now</p>
+                                    <a href="{% url 'jersey' %}" class="promo-btn">Explore Kits</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li><a href="{% url 'contact' %}" class="nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact</a></li>
+                </ul>
+            </nav>
+
+            <!-- Header Actions (Cart) -->
+            <div class="header-actions">
+                <a href="{% url 'cart' %}" class="cart-btn" title="View Cart">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="cart-label">Cart</span>
+                    <span class="cart-badge" id="cart-badge-count">{{ cart_count|default:0 }}</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Global Flash Messages Notification Toast -->
+    {% if messages %}
+    <div class="messages-container" id="toast-container">
+        {% for message in messages %}
+        <div class="toast-message toast-{{ message.tags }}">
+            <i class="fa-solid {% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+            <span>{{ message }}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global Image & Quick View Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-dialog">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-body">
+                <img class="modal-content" id="img01" alt="Enlarged view">
+                <div id="caption" class="modal-caption"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col brand-info">
+                    <div class="footer-logo">
+                        <span class="logo-text">d<span>SPORTS</span></span>
+                    </div>
+                    <p>Your premier destination for official club football jerseys, high performance running footwear, and athletic training essentials.</p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'shop' %}">All Products</a></li>
+                        <li><a href="{% url 'cart' %}">My Shopping Cart</a></li>
+                        <li><a href="{% url 'deliveryForm' %}">Delivery & Checkout</a></li>
+                        <li><a href="{% url 'contact' %}">Customer Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Departments</h4>
+                    <ul>
+                        <li><a href="{% url 'jersey' %}">Football Club Jerseys</a></li>
+                        <li><a href="{% url 'shoes' %}">Football Boots & Studs</a></li>
+                        <li><a href="{% url 'maleRunningShoes' %}">Men's Running Shoes</a></li>
+                        <li><a href="{% url 'femaleRunningShoes' %}">Women's Running Shoes</a></li>
+                        <li><a href="{% url 'trainingmen' %}">Men's Gym & Training</a></li>
+                        <li><a href="{% url 'trainingwomen' %}">Women's Activewear</a></li>
+                        <li><a href="{% url 'trainingkids' %}">Youth & Kids Sport</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col contact-info">
+                    <h4>Contact & Campus</h4>
+                    <p><i class="fa-solid fa-location-dot"></i> MALLA REDDY UNIVERSITY, 500011<br>Dullapally, Maisammaguda, Hyderabad, Telangana</p>
+                    <p><i class="fa-solid fa-phone"></i> +91 7013722022</p>
+                    <p><i class="fa-solid fa-envelope"></i> 2411CS010387@mallareddyuniversity.ac.in</p>
+                    <p><i class="fa-solid fa-clock"></i> Mon - Fri: 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 dSports Management & E-Commerce. All rights reserved. | University Project Edition</p>
+                <div class="payment-badges">
+                    <span><i class="fa-brands fa-cc-visa"></i> Visa</span>
+                    <span><i class="fa-brands fa-cc-mastercard"></i> Mastercard</span>
+                    <span><i class="fa-brands fa-paypal"></i> PayPal</span>
+                    <span><i class="fa-solid fa-shield-halved"></i> Secure SSL Checkout</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
